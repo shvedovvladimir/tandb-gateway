@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  tandb-gateway:
+    build:
+      ./
+    env_file:
+      - variables.env
+    ports:
+      - "9080:9080"
+    networks:
+      - backend
+    command: ["/application/start.sh"]
+
+networks:
+  backend:

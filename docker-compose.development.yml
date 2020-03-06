@@ -1,0 +1,10 @@
+version: "3.3"
+services:
+  tandb-gateway:
+    restart: always
+    volumes:
+      - ./src:/application/src
+    command: ["/application/dev.sh"]
+
+networks:
+  backend:
