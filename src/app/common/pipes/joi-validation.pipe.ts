@@ -3,7 +3,6 @@ import {
   Injectable,
   ArgumentMetadata,
 } from '@nestjs/common';
-import * as joi from '@hapi/joi';
 
 import { ValidationError } from '../errors/validation.error';
 
@@ -14,9 +13,7 @@ export class JoiValidationPipe implements PipeTransform {
     ) {}
 
     public transform(_value: any, metadata: ArgumentMetadata): any {
-        const { value, error } = joi.validate(_value, this._schema, {
-            stripUnknown: true, abortEarly: false,
-        });
+        const { value, error } = this._schema.validate(_value);
 
         if (error) {
             throw new ValidationError(this._toSanitazerErrorDetails(error));

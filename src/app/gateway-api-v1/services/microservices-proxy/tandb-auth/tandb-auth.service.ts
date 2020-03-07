@@ -22,7 +22,6 @@ export class TandbAuthProxyService implements ITandbAuthProxyService {
     }
 
     public async getTokenByProvidedCredentials(providedCredentials: IProvidedCredentials): Promise<ITokenResponse> {
-        console.log('##############################')
         this._logger.debug('Trying get token by provided credentials from tandb-auth service', providedCredentials);
 
         const url = this._configService.get('microservicesProxy.tandbAuth.microserviceUrl');

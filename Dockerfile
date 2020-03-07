@@ -5,7 +5,7 @@ ENV NODE_ENV=development
 # Default to UTF-8 file.encoding
 ENV LANG C.UTF-8
 
-RUN apk update && apk add bash git python make
+RUN apk update && apk add bash git openssh openssl ffmpeg python make g++ p11-kit-trust
 
 WORKDIR /application
 

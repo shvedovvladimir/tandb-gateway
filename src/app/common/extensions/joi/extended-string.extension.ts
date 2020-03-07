@@ -1,13 +1,22 @@
-import { Extension, State, ValidationOptions, Root } from '@hapi/joi';
-import * as joi from '@hapi/joi';
+import { ValidationOptions } from '@hapi/joi';
+import * as Joi from '@hapi/joi';
 import * as validator from 'validator';
 
-export function extendedString(joi: Root): Extension {
+export const joiExtended = Joi.extend((joi) => {
     return {
         base: joi.string(),
+        messages: {
+            'extendedString.escape': '"{{#label}}" bad string',
+            'extendedString.unescape': '"{{#label}}" bad string',
+            'extendedString.normalizeEmail': '"{{#label}}" bad email',
+        },
         rules: {
             escape: {
-                validate(params: object, value: string, state: State, options: ValidationOptions): string {
+                convert: true,
+                method(): any {
+                    return this.$_addRule({ name: 'escape' });
+                },
+                validate(value: string, helpers: any, args: any, options: ValidationOptions): string {
                     return options.convert ?
                         value.replace(/&/g, '&amp;')
                             .replace(/"/g, '&quot;')
@@ -21,7 +30,12 @@ export function extendedString(joi: Root): Extension {
                 },
             },
             unescape: {
-                validate(params: object, value: string, state: State, options: ValidationOptions): string {
+                convert: true,
+                method(): any {
+
+                    return this.$_addRule({ name: 'unescape' });
+                },
+                validate(value: string, helpers: any, args: any, options: ValidationOptions): string {
                     return options.convert ?
                         value.replace(/&amp;/g, '&')
                             .replace(/&quot;/g, '"')
@@ -35,7 +49,12 @@ export function extendedString(joi: Root): Extension {
                 },
             },
             normalizeEmail: {
-                validate(params: object, value: string, state: State, options: ValidationOptions): string {
+                convert: true,
+                method(): any {
+
+                    return this.$_addRule({ name: 'normalizeEmail' });
+                },
+                validate(value: string, helpers: any, args: any, options: ValidationOptions): string {
                     const result = options.convert ?
                         (validator.default.normalizeEmail(value) || value)
                     : value;
@@ -50,19 +69,4 @@ export function extendedString(joi: Root): Extension {
         },
         type: 'extendedString',
     };
-}
-
-// tslint:disable
-declare namespace JoiExtension {
-    export interface ExtendedStringSchema extends joi.StringSchema {
-        escape(): this;
-        unescape(): this;
-        normalizeEmail(): this;
-    }
-
-    export function extendedString(): ExtendedStringSchema;
-}
-
-export type JoiExtended = (typeof joi & typeof JoiExtension);
-
-export const joiExtended: JoiExtended = joi.extend(extendedString(joi));
+});
