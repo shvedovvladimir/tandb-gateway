@@ -14,6 +14,18 @@ export default (): IConfiguration => ({
         guiUri: process.env.SWAGGER_GUI_URI,
         jsonUri: process.env.SWAGGER_JSON_URI,
     },
+    logger: {
+        level: process.env.LOG_LEVEL || 'DEBUG',
+        printStackTrace: true,
+        format: {
+            separator: '\n',
+        },
+    },
+    microservicesProxy: {
+        tandbAuth: {
+            microserviceUrl: process.env.TANDB_AUTH_URL,
+        },
+    },
 });
 
 enum ESchemeType {

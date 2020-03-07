@@ -5,11 +5,8 @@ import * as validator from 'validator';
 export function extendedString(joi: Root): Extension {
     return {
         base: joi.string(),
-        name: 'extendedString',
-        rules: [
-            {
-                name: 'escape',
-                description: 'Escaped string',
+        rules: {
+            escape: {
                 validate(params: object, value: string, state: State, options: ValidationOptions): string {
                     return options.convert ?
                         value.replace(/&/g, '&amp;')
@@ -23,9 +20,7 @@ export function extendedString(joi: Root): Extension {
                         : value;
                 },
             },
-            {
-                name: 'unescape',
-                description: 'Unscaped string',
+            unescape: {
                 validate(params: object, value: string, state: State, options: ValidationOptions): string {
                     return options.convert ?
                         value.replace(/&amp;/g, '&')
@@ -39,9 +34,7 @@ export function extendedString(joi: Root): Extension {
                         : value;
                 },
             },
-            {
-                name: 'normalizeEmail',
-                description: 'Normalize email',
+            normalizeEmail: {
                 validate(params: object, value: string, state: State, options: ValidationOptions): string {
                     const result = options.convert ?
                         (validator.default.normalizeEmail(value) || value)
@@ -54,7 +47,8 @@ export function extendedString(joi: Root): Extension {
                     return result;
                 },
             },
-        ],
+        },
+        type: 'extendedString',
     };
 }
 

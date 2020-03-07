@@ -15,23 +15,27 @@
     "dev": "ts-node-dev --inspect=0.0.0.0 --prefer-ts --all-deps --ignore-watch node_modules  --respawn --transpileOnly src/index.ts"
   },
   "dependencies": {
-    "@eropple/nestjs-correlation-id": "^1.0.1",
     "@hapi/joi": "^17.1.0",
     "@nestjs/common": "^6.11.11",
     "@nestjs/config": "^0.2.4",
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
     "@nestjs/swagger": "^3.1.0",
+    "cls-hooked": "^4.2.2",
     "config": "2.0.1",
     "cookie-parser": "^1.4.3",
     "got": "^9.5.0",
+    "node-gyp": "^6.1.0",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.4",
     "swagger-ui-dist": "^3.24.3",
     "swagger-ui-express": "^4.1.2",
-    "validator": "^12.2.0"
+    "uuid": "^7.0.2",
+    "validator": "^12.2.0",
+    "winston": "^3.2.1",
+    "winston-transport": "^4.3.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^6.9.0",

@@ -1,9 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { GatewayApiV1Module } from './gateway-api-v1/user-stats.module';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { GatewayApiV1Module } from './gateway-api-v1/gateway-api-v1.module';
 import { AuthController } from './gateway-api-v1/controllers/auth.controller';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '../../config/configuration';
-
+import { RequestIdMiddleware } from './common/middleware/request-id-middleware';
 @Module({
     imports: [
         GatewayApiV1Module,
@@ -15,6 +15,10 @@ import configuration from '../../config/configuration';
 export class ApplicationModule implements NestModule {
 
     public configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {
+        consumer
+            .apply(RequestIdMiddleware)
+            .forRoutes({ path: '*', method: RequestMethod.ALL });
+
         consumer
             .apply()  // use middleware
             .forRoutes(

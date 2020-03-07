@@ -1,6 +1,14 @@
 version: "3.3"
 services:
   tandb-gateway:
+    build:
+      ./
+    env_file:
+      - variables.env
+    ports:
+      - "9080:9080"
+    networks:
+      - backend
     restart: always
     volumes:
       - ./src:/application/src

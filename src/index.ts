@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ApplicationModule } from './app/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -7,16 +7,20 @@ import { ValidationExceptionFilter } from './app/common/filter/validation-except
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { CommonModule } from './app/common/common.module';
 import configuration from '../config/configuration';
-import { CorrelationIdMiddleware } from '@eropple/nestjs-correlation-id';
+import { ILogger } from './app/common/logger';
+import { LOGGER } from './app/gateway-api-v1/di-constants';
 
 async function bootstrap(): Promise<INestApplication> {
     const conf = configuration();
 
-    const app = await NestFactory.create<NestExpressApplication>(ApplicationModule, new ExpressAdapter());
+    const app = await NestFactory.create<NestExpressApplication>(
+        ApplicationModule, new ExpressAdapter(),
+    );
 
     app.use(cookieParser());
-    app.use(CorrelationIdMiddleware());
     app.enableCors({ origin: true });
+    const logger = app.get<ILogger>(LOGGER);
+    logger.replaceConsole();
 
     app.useGlobalFilters(app.select(CommonModule).get<ValidationExceptionFilter>(ValidationExceptionFilter));
 
