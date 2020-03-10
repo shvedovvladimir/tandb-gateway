@@ -29,6 +29,7 @@ async function bootstrap(): Promise<INestApplication> {
         .setDescription(conf.swagger.description)
         .setVersion(conf.swagger.apiVersion as string)
         .setSchemes(conf.swagger.scheme)
+        .addBearerAuth('x-access-token')
         .build();
 
     const v1Document = SwaggerModule.createDocument(

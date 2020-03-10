@@ -11,8 +11,8 @@ export class AuthErrorResponse {
         'AUTH', 'AUTH_NO_TOKEN', 'AUTH_TOKEN_EXPIRED', 'AUTH_TOKEN_INVALID',
         'AUTH_TOKEN_LOCATION_MISMATCH',
     ]})
-    public error: string;
+    public code: string;
 
     @ApiModelPropertyOptional()
-    public error_details: object;
+    public details: object;
 }

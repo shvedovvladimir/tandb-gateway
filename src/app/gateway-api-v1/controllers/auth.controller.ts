@@ -7,7 +7,7 @@ import {
     Injectable,
     Body,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiUseTags } from '@nestjs/swagger';
 import { AbstractController } from '../../common/controller/abstract.controller';
 import { TokenResponse } from '../response/token.response';
 import { CredentialsErrorResponse } from '../../common/response/credentials-error.response';
@@ -17,10 +17,12 @@ import { DI_CONSTANTS } from '../di-constants';
 import {
     ITandbAuthProxyService,
     ITokenResponse,
+    IAccessKeyResponse,
 } from '../services/microservices-proxy/tandb-auth/tandb-auth.interface';
 import { JoiValidationPipe } from '../../common/pipes/joi-validation.pipe';
 import { getTokenJoiSchema } from '../schemas/get-token.schemas';
 import { GetTokenDto } from '../dto/get-token.dto';
+import { AccessKeyResponse } from '../response/access-key.response';
 
 @Controller('api')
 @ApiUseTags('Auth service api')
@@ -35,7 +37,6 @@ export class AuthController extends AbstractController {
     }
 
     @Post('get-token')
-    @ApiBearerAuth()
     @ApiOperation(
         {
             title: 'Get access token by provided credentials.',
@@ -62,6 +63,37 @@ export class AuthController extends AbstractController {
         @Body(new JoiValidationPipe(getTokenJoiSchema)) providedCredentials: GetTokenDto,
     ): Promise<ITokenResponse> {
         const resp = await this._tandbAuthProxyService.getTokenByProvidedCredentials(providedCredentials);
+
+        return resp;
+    }
+
+    @Post('add-access-key')
+    @ApiOperation(
+        {
+            title: 'Get access token by provided credentials.',
+        },
+    )
+    @ApiResponse({
+        status: 200,
+        type: AccessKeyResponse,
+    })
+    @ApiResponse({
+        status: 400,
+        type: CredentialsErrorResponse,
+    })
+    @ApiResponse({
+        status: 500,
+        type: CommonErrorResponse,
+    })
+    @ApiResponse({
+        status: 401,
+        type: AuthErrorResponse,
+    } as any)
+    @HttpCode(HttpStatus.OK)
+    public async addAccessKey(
+        @Body(new JoiValidationPipe(getTokenJoiSchema)) providedCredentials: GetTokenDto,
+    ): Promise<IAccessKeyResponse> {
+        const resp = await this._tandbAuthProxyService.addAccessKey(providedCredentials.accessKey);
 
         return resp;
     }
