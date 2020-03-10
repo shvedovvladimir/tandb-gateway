@@ -9,15 +9,12 @@ import { IVoteResponse, IVoteResultsResponse, ITandbVoteProxyService } from './t
 
 @Injectable()
 export class TandbVoteProxyService implements ITandbVoteProxyService {
-    protected readonly _config: IMicroservicesProxyConfiguration;
 
     constructor(
         @Inject(LOGGER)
         private readonly _logger: ILogger,
         private readonly _configService: ConfigService,
-    ) {
-        this._config = _configService.get('microservicesProxy.tandbAuth');
-    }
+    ) {}
 
     public async voteFor(voteFor: string, accessKeyId: number): Promise<IVoteResponse> {
         this._logger
@@ -62,7 +59,7 @@ export class TandbVoteProxyService implements ITandbVoteProxyService {
             .debug(`Trying get result for from accessKeyId: ${accessKeyId} from tandb-vote service`);
 
         const url = this._configService
-            .get('microservicesProxy.tandbAuth.microserviceUrl') +
+            .get('microservicesProxy.tandbVote.microserviceUrl') +
             `/results?limit=${limit}&offset=${offset}&accessKeyId=${accessKeyId}`;
 
         const method = 'GET';

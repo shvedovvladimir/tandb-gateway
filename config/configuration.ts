@@ -25,6 +25,9 @@ export default (): IConfiguration => ({
         tandbAuth: {
             microserviceUrl: process.env.TANDB_AUTH_URL,
         },
+        tandbVote: {
+            microserviceUrl: process.env.TANDB_VOTE_URL,
+        },
     },
 });
 

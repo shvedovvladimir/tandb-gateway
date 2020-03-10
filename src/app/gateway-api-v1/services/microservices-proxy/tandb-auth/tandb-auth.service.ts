@@ -11,15 +11,12 @@ import { ILogger } from '../../../../common/logger';
 
 @Injectable()
 export class TandbAuthProxyService implements ITandbAuthProxyService {
-    protected readonly _config: IMicroservicesProxyConfiguration;
 
     constructor(
         @Inject(LOGGER)
         private readonly _logger: ILogger,
         private readonly _configService: ConfigService,
-    ) {
-        this._config = _configService.get('microservicesProxy.tandbAuth');
-    }
+    ) {}
 
     public async getTokenByProvidedCredentials(providedCredentials: IProvidedCredentials): Promise<ITokenResponse> {
         this._logger.debug('Trying get token by provided credentials from tandb-auth service', providedCredentials);
