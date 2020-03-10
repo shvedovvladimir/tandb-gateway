@@ -16,23 +16,29 @@ export class ErrorFilter implements ExceptionFilter {
 
         if (!(catchedErr instanceof CommonError)) {
             exception = new CommonError(
-                catchedErr.message || '', catchedErr.code || 'ERROR', {info: JSON.stringify(catchedErr)},
-            );
+                (
+                    catchedErr.body &&
+                    catchedErr.body.error &&
+                    catchedErr.body.error.details ? catchedErr.body.error.details : ''
+                ) || catchedErr.message,
+                catchedErr.code || (
+                    catchedErr.body &&
+                    catchedErr.body.error &&
+                    catchedErr.body.error.code ? catchedErr.body.error.code : 'ERROR'),
+                {info: JSON.stringify(catchedErr),
+            });
 
             if (catchedErr instanceof HttpException) {
                 exception.status = catchedErr.getStatus();
+            } else if (catchedErr.statusCode) {
+                exception.status = catchedErr.statusCode;
             }
         }
 
         if (catchedErr.stack) {
             exception.stack = catchedErr.stack;
         }
-
-        let details = exception.publicDetails || exception.message || 'Internal error';
-
-        if (!(catchedErr instanceof CommonError)) {
-            details = exception.publicDetails || 'Internal error';
-        }
+        const details = exception.message || 'Internal error';
 
         response
             .status(exception.status)

@@ -18,14 +18,6 @@ export class ValidationExceptionFilter extends ErrorFilter {
 
         const exception = catchedError;
 
-        if (catchedError.stack) {
-            exception.stack = catchedError.stack;
-        }
-
-        // tslint:disable
-        console.error(exception as any);
-        // tslint:enable
-
         response.status(exception.status).json({
             error: {
                 statusCode: exception.status,
