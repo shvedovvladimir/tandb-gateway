@@ -24,7 +24,7 @@
     "cls-hooked": "^4.2.2",
     "config": "2.0.1",
     "cookie-parser": "^1.4.3",
-    "got": "^9.5.0",
+    "got": "^11.8.5",
     "node-gyp": "^6.1.0",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",
